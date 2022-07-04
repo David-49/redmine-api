@@ -14,7 +14,8 @@ class Response
         public ?int $offset,
         public ?int $limit,
         public ?int $total,
-    ) {}
+    ) {
+    }
 
     public static function make(string $type, array $rawResponse): self
     {
