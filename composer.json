@@ -1,0 +1,32 @@
+{
+    "name": "ouestcode/redmine-api",
+    "description": "Redmine API Client",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "William",
+            "email": "bonjour@ouestcode.dev"
+        }
+    ],
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.3"
+    },
+    "require-dev": {
+        "php": "^8.0",
+        "phpunit/phpunit": "^9.5",
+        "symfony/var-dumper": "^5.3",
+        "spatie/data-transfer-object": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "OuestCode\\RedmineApi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable"
+}
