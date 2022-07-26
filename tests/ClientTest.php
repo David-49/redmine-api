@@ -7,18 +7,19 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use OuestCode\RedmineApi\Client;
-use OuestCode\RedmineApi\Dto\Items\Activity;
-use OuestCode\RedmineApi\Dto\Items\Author;
-use OuestCode\RedmineApi\Dto\Items\CustomField;
-use OuestCode\RedmineApi\Dto\Items\Issue;
-use OuestCode\RedmineApi\Dto\Items\Journal;
-use OuestCode\RedmineApi\Dto\Items\TimeEntry;
-use OuestCode\RedmineApi\Dto\Items\Priority;
-use OuestCode\RedmineApi\Dto\Items\Project;
-use OuestCode\RedmineApi\Dto\Items\Status;
-use OuestCode\RedmineApi\Dto\Items\Tracker;
-use OuestCode\RedmineApi\Dto\Items\Version;
-use OuestCode\RedmineApi\Response;
+use OuestCode\RedmineApi\Entities\Activity;
+use OuestCode\RedmineApi\Entities\Author;
+use OuestCode\RedmineApi\Entities\CustomField;
+use OuestCode\RedmineApi\Entities\Issue;
+use OuestCode\RedmineApi\Entities\Journal;
+use OuestCode\RedmineApi\Entities\TimeEntry;
+use OuestCode\RedmineApi\Entities\Priority;
+use OuestCode\RedmineApi\Entities\Project;
+use OuestCode\RedmineApi\Entities\Status;
+use OuestCode\RedmineApi\Entities\Tracker;
+use OuestCode\RedmineApi\Entities\Version;
+use OuestCode\RedmineApi\Entities\Response;
+use OuestCode\RedmineApi\HttpHandler;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client as Http;
 
@@ -300,13 +301,18 @@ class ClientTest extends TestCase
         $this->assertIsArray($issue->journals[0]->details);
     }
 
-    protected function createHttpMock(string $body): Http
+    protected function createHttpMock(string $body): HttpHandler
     {
-        $mock = new MockHandler([
+        $mockHandler = new MockHandler([
             new GuzzleResponse(200, [], $body),
         ]);
 
-        $handlerStack = HandlerStack::create($mock);
-        return new Http(['handler' => $handlerStack]);
+        $handlerStack = HandlerStack::create($mockHandler);
+        $http = new Http(['handler' => $handlerStack]);
+
+        $httpHandler = new HttpHandler('https://redmine.dev', 'j.doe');
+        $httpHandler->setHttpClient($http);
+
+        return $httpHandler;
     }
 }

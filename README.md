@@ -20,11 +20,12 @@ composer require ouestcode/redmine-api
 First of all, you need to construct our service with a Guzzle client like this :
 
 ```php
-$http = new GuzzleHttp\Client([
-    'base_uri' => 'https://redmine.org',
-]);
+$httpHandler = new \OuestCode\RedmineApi\HttpHandler(
+  baseUri: 'https://redmine.org',
+  username: 'j.doe'
+);
 
-$redmine = new \OuestCode\RedmineApi\Client($http);
+$redmine = new \OuestCode\RedmineApi\Client($httpHandler);
 ```
 
 Let's discuss all possibilities one by one.
@@ -58,7 +59,7 @@ foreach ($response->items as $issue) {
 You can grab project's versions from [Redmine API](https://www.redmine.org/projects/redmine/wiki/Rest_Versions) using this method :
 
 ```php
-$project = new \OuestCode\RedmineApi\Dto\Items\Project([
+$project = new \OuestCode\RedmineApi\Entities\Project([
     'id' => 42,
 ])
 
@@ -88,7 +89,7 @@ foreach ($response->items as $timeEntry) {
 You can grab specific issue from [Redmine API](https://www.redmine.org/projects/redmine/wiki/Rest_Issues) using this method :
 
 ```php
-$issue = new \OuestCode\RedmineApi\Dto\Items\Issue([
+$issue = new \OuestCode\RedmineApi\Entities\Issue([
     'id' => 1
 ]);
 
