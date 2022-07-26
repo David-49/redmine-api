@@ -310,7 +310,7 @@ class ClientTest extends TestCase
         $handlerStack = HandlerStack::create($mockHandler);
         $http = new Http(['handler' => $handlerStack]);
 
-        $httpHandler = new HttpHandler('https://redmine.dev', 'j.doe');
+        $httpHandler = new HttpHandler('https://redmine.org');
         $httpHandler->setHttpClient($http);
 
         return $httpHandler;

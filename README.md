@@ -21,8 +21,7 @@ First of all, you need to construct our service with a Guzzle client like this :
 
 ```php
 $httpHandler = new \OuestCode\RedmineApi\HttpHandler(
-  baseUri: 'https://redmine.org',
-  username: 'j.doe'
+    baseUri: 'https://redmine.org'
 );
 
 $redmine = new \OuestCode\RedmineApi\Client($httpHandler);

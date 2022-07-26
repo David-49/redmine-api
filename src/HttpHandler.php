@@ -15,7 +15,7 @@ class HttpHandler
 
     public function __construct(
         protected string $baseUri,
-        protected string $username,
+        protected ?string $username = null,
         protected ?string $password = null
     ) {
     }
