@@ -1,6 +1,6 @@
 <?php
 
-namespace OuestCode\RedmineApi\Dto\Items;
+namespace OuestCode\RedmineApi\Entities;
 
 use DateTime;
 use OuestCode\RedmineApi\Casters\DateTimeCaster;

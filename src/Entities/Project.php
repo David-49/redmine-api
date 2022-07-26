@@ -1,34 +1,28 @@
 <?php
 
-namespace OuestCode\RedmineApi\Dto\Items;
+namespace OuestCode\RedmineApi\Entities;
 
 use DateTime;
 use OuestCode\RedmineApi\Casters\DateTimeCaster;
-use OuestCode\RedmineApi\Dto\Items\Project;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Attributes\MapFrom;
 use Spatie\DataTransferObject\DataTransferObject;
 
-class Version extends DataTransferObject
+class Project extends DataTransferObject
 {
     public int $id;
 
-    public string $name;
-
-    public ?Project $project;
+    public ?string $name;
 
     public ?string $description;
 
-    public ?string $status;
+    public ?int $status;
 
-    #[MapFrom('due_date')]
-    #[CastWith(DateTimeCaster::class)]
-    public ?DateTime $dueDate;
+    #[MapFrom('is_public')]
+    public ?bool $isPublic;
 
-    public ?string $sharing;
-
-    #[MapFrom('wiki_page_title')]
-    public ?string $wikiPageTitle;
+    #[MapFrom('inherit_members')]
+    public ?bool $inheritMembers;
 
     #[MapFrom('created_on')]
     #[CastWith(DateTimeCaster::class)]

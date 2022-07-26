@@ -1,10 +1,10 @@
 <?php
 
-namespace OuestCode\RedmineApi\Dto\Items;
+namespace OuestCode\RedmineApi\Entities;
 
 use Spatie\DataTransferObject\DataTransferObject;
 
-class Priority extends DataTransferObject
+class Author extends DataTransferObject
 {
     public int $id;
 
