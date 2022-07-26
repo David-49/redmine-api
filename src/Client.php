@@ -10,7 +10,8 @@ class Client
 {
     public function __construct(
         protected HttpHandler $http,
-    ) {}
+    ) {
+    }
 
     public function getProjects(array $params = []): Response
     {
@@ -19,7 +20,7 @@ class Client
 
     public function getIssues(array $params = []): Response
     {
-        return $this->http->sendRequest('get','issues.json', $params);
+        return $this->http->sendRequest('get', 'issues.json', $params);
     }
 
     public function getIssue(Issue $issue, array $params = []): Response
@@ -42,6 +43,6 @@ class Client
 
     public function getTimeEntries(array $params = []): Response
     {
-        return $this->http->sendRequest('get','time_entries.json', $params);
+        return $this->http->sendRequest('get', 'time_entries.json', $params);
     }
 }

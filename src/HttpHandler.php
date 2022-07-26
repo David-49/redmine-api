@@ -17,7 +17,8 @@ class HttpHandler
         protected string $baseUri,
         protected string $username,
         protected ?string $password = null
-    ) {}
+    ) {
+    }
 
     public function setAuth(string $username, string $password = null): static
     {
@@ -61,7 +62,7 @@ class HttpHandler
 
     protected function extractItemsFromBody(array $body): array
     {
-        list($items, $class) = match(true) {
+        list($items, $class) = match (true) {
             array_key_exists('projects', $body) => [$body['projects'], Project::class],
             array_key_exists('issues', $body) => [$body['issues'], Issue::class],
             array_key_exists('issue', $body) => [[$body['issue']], Issue::class],
