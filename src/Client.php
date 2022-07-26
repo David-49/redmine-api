@@ -45,4 +45,9 @@ class Client
     {
         return $this->http->sendRequest('get', 'time_entries.json', $params);
     }
+
+    public function getHttpHandler(): HttpHandler
+    {
+        return $this->http;
+    }
 }
