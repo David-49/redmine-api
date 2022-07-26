@@ -11,7 +11,7 @@ use OuestCode\RedmineApi\Entities\Response;
 
 class HttpHandler
 {
-    private ?Http $http;
+    private ?Http $http = null;
 
     public function __construct(
         protected string $baseUri,
