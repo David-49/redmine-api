@@ -10,10 +10,10 @@
     ],
     "type": "library",
     "require": {
+        "php": "^8.0",
         "guzzlehttp/guzzle": "^7.3"
     },
     "require-dev": {
-        "php": "^8.0",
         "phpunit/phpunit": "^9.5",
         "symfony/var-dumper": "^5.3",
         "spatie/data-transfer-object": "^3.0",
