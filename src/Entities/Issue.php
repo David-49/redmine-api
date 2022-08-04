@@ -13,6 +13,8 @@ class Issue extends DataTransferObject
 {
     public int $id;
 
+    public ?string $baseUri;
+
     public ?string $subject;
 
     public ?string $description;
@@ -67,4 +69,15 @@ class Issue extends DataTransferObject
     #[MapFrom('closed_on')]
     #[CastWith(DateTimeCaster::class)]
     public ?DateTime $closedOn;
+
+    public function getUrl(): ?string
+    {
+        if (! $this->baseUri) {
+            return null;
+        }
+
+        $baseUri = parse_url($this->baseUri);
+
+        return sprintf('%s://%s/issues/%s', $baseUri['scheme'], $baseUri['host'], $this->id);
+    }
 }

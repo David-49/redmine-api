@@ -50,7 +50,7 @@ class HttpHandler
             flags: JSON_OBJECT_AS_ARRAY
         );
 
-        $items = $this->extractItemsFromBody($body);
+        $items = $this->extractItemsFromBody($body, $http);
 
         return new Response(
             items: $items,
@@ -60,8 +60,10 @@ class HttpHandler
         );
     }
 
-    protected function extractItemsFromBody(array $body): array
+    protected function extractItemsFromBody(array $body, Http $http): array
     {
+        $baseUri = (string) $http->getConfig('base_uri');
+
         list($items, $class) = match (true) {
             array_key_exists('projects', $body) => [$body['projects'], Project::class],
             array_key_exists('issues', $body) => [$body['issues'], Issue::class],
@@ -71,7 +73,11 @@ class HttpHandler
         };
 
         return array_map(
-            fn(array $properties) => new $class($properties),
+            function (array $properties) use ($baseUri, $class) {
+                $properties += ['baseUri' => $baseUri];
+
+                return new $class($properties);
+            },
             $items
         );
     }

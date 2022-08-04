@@ -132,6 +132,8 @@ class ClientTest extends TestCase
         $this->assertEquals('2021-10-05', $issue->updatedOn->format('Y-m-d'));
 
         $this->assertEquals(null, $issue->closedOn);
+
+        $this->assertEquals('https://redmine.org/issues/2', $issue->getUrl());
     }
 
     /** @test */
@@ -206,6 +208,7 @@ class ClientTest extends TestCase
 
         $this->assertInstanceOf(Issue::class, $timeEntry->issue);
         $this->assertEquals(1, $timeEntry->issue->id);
+        $this->assertNull($timeEntry->issue->getUrl());
 
         $this->assertInstanceOf(Author::class, $timeEntry->author);
         $this->assertEquals(1, $timeEntry->author->id);
@@ -299,6 +302,8 @@ class ClientTest extends TestCase
         $this->assertEquals('2021-09-24', $issue->journals[0]->createdOn->format('Y-m-d'));
         $this->assertFalse($issue->journals[0]->privateNotes);
         $this->assertIsArray($issue->journals[0]->details);
+
+        $this->assertEquals('https://redmine.org/issues/1', $issue->getUrl());
     }
 
     protected function createHttpMock(string $body): HttpHandler
@@ -308,9 +313,9 @@ class ClientTest extends TestCase
         ]);
 
         $handlerStack = HandlerStack::create($mockHandler);
-        $http = new Http(['handler' => $handlerStack]);
+        $http = new Http(['handler' => $handlerStack, 'base_uri' => 'https://redmine.org/']);
 
-        $httpHandler = new HttpHandler('https://redmine.org');
+        $httpHandler = new HttpHandler('https://redmine.org/');
         $httpHandler->setHttpClient($http);
 
         return $httpHandler;
