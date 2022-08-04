@@ -67,4 +67,15 @@ class Issue extends DataTransferObject
     #[MapFrom('closed_on')]
     #[CastWith(DateTimeCaster::class)]
     public ?DateTime $closedOn;
+
+    public function getCustomField(string $fieldName): ?CustomField
+    {
+        if (! $this->customFields) {
+            return null;
+        }
+
+        $field = array_filter($this->customFields, fn (CustomField $field) => $field->name === $fieldName);
+
+        return array_pop($field);
+    }
 }
