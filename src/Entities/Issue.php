@@ -70,6 +70,17 @@ class Issue extends DataTransferObject
     #[CastWith(DateTimeCaster::class)]
     public ?DateTime $closedOn;
 
+    public function getCustomField(string $fieldName): ?CustomField
+    {
+        if (! $this->customFields) {
+            return null;
+        }
+
+        $field = array_filter($this->customFields, fn (CustomField $field) => $field->name === $fieldName);
+
+        return array_pop($field);
+    }
+
     public function getUrl(): ?string
     {
         if (! $this->baseUri) {

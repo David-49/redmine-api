@@ -124,6 +124,7 @@ class ClientTest extends TestCase
         $this->assertEquals(1, $issue->customFields[0]->id);
         $this->assertEquals('Valeur métier', $issue->customFields[0]->name);
         $this->assertEquals('1000', $issue->customFields[0]->value);
+        $this->assertEquals('1000', $issue->getCustomField('Valeur métier')->value);
 
         $this->assertInstanceOf(DateTime::class, $issue->createdOn);
         $this->assertEquals('2021-10-05', $issue->createdOn->format('Y-m-d'));
@@ -285,6 +286,7 @@ class ClientTest extends TestCase
         $this->assertEquals(false, $issue->isPrivate);
         $this->assertEquals(null, $issue->estimatedHours);
         $this->assertNull($issue->customFields);
+        $this->assertNull($issue->getCustomField('Nope'));
 
         $this->assertInstanceOf(DateTime::class, $issue->createdOn);
         $this->assertEquals('2021-09-24', $issue->createdOn->format('Y-m-d'));
