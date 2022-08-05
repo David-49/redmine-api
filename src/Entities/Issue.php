@@ -13,6 +13,8 @@ class Issue extends DataTransferObject
 {
     public int $id;
 
+    public ?string $baseUri;
+
     public ?string $subject;
 
     public ?string $description;
@@ -77,5 +79,16 @@ class Issue extends DataTransferObject
         $field = array_filter($this->customFields, fn (CustomField $field) => $field->name === $fieldName);
 
         return array_pop($field);
+    }
+
+    public function getUrl(): ?string
+    {
+        if (! $this->baseUri) {
+            return null;
+        }
+
+        $baseUri = parse_url($this->baseUri);
+
+        return sprintf('%s://%s/issues/%s', $baseUri['scheme'], $baseUri['host'], $this->id);
     }
 }
