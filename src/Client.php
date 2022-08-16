@@ -2,10 +2,18 @@
 
 namespace OuestCode\RedmineApi;
 
-use OuestCode\RedmineApi\Entities\Issue;
-use OuestCode\RedmineApi\Entities\Project;
-use OuestCode\RedmineApi\Entities\Response;
+use OuestCode\RedmineApi\Exceptions\UnexpectedProviderException;
+use OuestCode\RedmineApi\Providers\IssueProvider;
+use OuestCode\RedmineApi\Providers\ProjectProvider;
+use OuestCode\RedmineApi\Providers\TimeEntryProvider;
+use OuestCode\RedmineApi\Providers\VersionProvider;
 
+/**
+ * @method IssueProvider issue()
+ * @method ProjectProvider project()
+ * @method VersionProvider version()
+ * @method TimeEntryProvider timeEntry()
+ */
 class Client
 {
     public function __construct(
@@ -13,37 +21,15 @@ class Client
     ) {
     }
 
-    public function getProjects(array $params = []): Response
+    public function __call(string $name, array $arguments = [])
     {
-        return $this->http->sendRequest('get', 'projects.json', $params);
-    }
-
-    public function getIssues(array $params = []): Response
-    {
-        return $this->http->sendRequest('get', 'issues.json', $params);
-    }
-
-    public function getIssue(Issue $issue, array $params = []): Response
-    {
-        return $this->http->sendRequest(
-            'get',
-            sprintf('/issues/%s.json', $issue->id),
-            $params
-        );
-    }
-
-    public function getVersions(Project $project, array $params = []): Response
-    {
-        return $this->http->sendRequest(
-            'get',
-            sprintf('projects/%s/versions.json', $project->id),
-            $params
-        );
-    }
-
-    public function getTimeEntries(array $params = []): Response
-    {
-        return $this->http->sendRequest('get', 'time_entries.json', $params);
+        return match ($name) {
+            'issue' => new IssueProvider($this->http),
+            'project' => new ProjectProvider($this->http),
+            'version' => new VersionProvider($this->http),
+            'timeEntry' => new TimeEntryProvider($this->http),
+            default => throw new UnexpectedProviderException($name),
+        };
     }
 
     public function getHttpHandler(): HttpHandler

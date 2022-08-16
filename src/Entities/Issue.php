@@ -70,6 +70,8 @@ class Issue extends DataTransferObject
     #[CastWith(DateTimeCaster::class)]
     public ?DateTime $closedOn;
 
+    public ?string $note;
+
     public function getCustomField(string $fieldName): ?CustomField
     {
         if (! $this->customFields) {
@@ -90,5 +92,22 @@ class Issue extends DataTransferObject
         $baseUri = parse_url($this->baseUri);
 
         return sprintf('%s://%s/issues/%s', $baseUri['scheme'], $baseUri['host'], $this->id);
+    }
+
+    public function serialize(): array
+    {
+        return [
+            'subject' => $this->subject,
+            'description' => $this->description,
+            'project_id' => $this->project?->id,
+            'tracker_id' => $this->tracker?->id,
+            'status_id' => $this->status?->id,
+            'parent_issue_id' => $this->parent?->id,
+            'priority_id' => $this->priority?->id,
+            'fixed_version_id' => $this->version?->id,
+            'estimated_hours' => $this->estimatedHours,
+            'custom_fields' => array_map(fn (CustomField $field) => $field->serialize(), $this->customFields ?? []),
+            'notes' => $this->note,
+        ];
     }
 }
