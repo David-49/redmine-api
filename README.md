@@ -8,7 +8,7 @@ These methods return a specific DataTransfertObject (DTO) by endpoints.
 
 ## Installation
 
-This package requires `php:^8.0`.  
+This package requires `php:^8.1`.  
 You can install it via composer:
 
 ```bash
@@ -34,7 +34,7 @@ Let's discuss all possibilities one by one.
 You can grab projects from [Redmine API](https://www.redmine.org/projects/redmine/wiki/Rest_Projects) using this method :
 
 ```php
-$response = $redmine->getProjects();
+$response = $redmine->project()->all();
 
 foreach ($response->items as $project) {
     echo $project->name;
@@ -46,7 +46,7 @@ foreach ($response->items as $project) {
 You can grab issues from [Redmine API](https://www.redmine.org/projects/redmine/wiki/Rest_Issues) using this method :
 
 ```php
-$response = $redmine->getIssues();
+$response = $redmine->issue()->all();
 
 foreach ($response->items as $issue) {
     echo $issue->subject;
@@ -62,7 +62,7 @@ $project = new \OuestCode\RedmineApi\Entities\Project([
     'id' => 42,
 ])
 
-$response = $redmine->getVersions($project);
+$response = $redmine->version()->all($project);
 
 foreach ($response->items as $version) {
     echo $version->name;
@@ -76,7 +76,7 @@ You can grab time entries from [Redmine API](https://www.redmine.org/projects/re
 ```php
 
 
-$response = $redmine->getTimeEntries();
+$response = $redmine->timeEntry()->all();
 
 foreach ($response->items as $timeEntry) {
     echo $timeEntry->hours;
@@ -88,13 +88,31 @@ foreach ($response->items as $timeEntry) {
 You can grab specific issue from [Redmine API](https://www.redmine.org/projects/redmine/wiki/Rest_Issues) using this method :
 
 ```php
-$issue = new \OuestCode\RedmineApi\Entities\Issue([
-    'id' => 1
-]);
-
-$response = $redmine->getIssue($issue);
+$response = $redmine->issue()->get(1);
 
 $issue = $response->items[0];
 
 echo $issue->subject;
 ``` 
+
+## Update an issue
+
+
+You can update an issue from [Redmine API](https://www.redmine.org/projects/redmine/wiki/Rest_Issues#Updating-an-issue) using this method :
+
+```php
+$issue = new \OuestCode\RedmineApi\Entities\Issue([
+    'id' => 1,
+    'subject' => 'Hello from API',
+    'project' => new Project(id: 1),
+    'note' => 'Update an issue from API',
+]);
+
+$response = $redmine->issue()->update($issue);
+
+if ($response->statusCode === 204) {
+    echo "Well done !"
+}
+``` 
+
+

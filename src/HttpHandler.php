@@ -35,14 +35,16 @@ class HttpHandler
         return $this;
     }
 
-    public function sendRequest(string $method, string $uri, array $params = []): Response
+    public function sendRequest(string $method, string $uri, array $params = []): array
     {
         $http = $this->http ?: new Http([
             'base_uri' => $this->baseUri,
             'auth' => [$this->username, $this->password]
         ]);
 
-        $response = $http->request($method, $uri, ['query' => $params]);
+        $key = in_array($method, ['post', 'put']) ? 'json' : 'query';
+
+        $response = $http->request($method, $uri, [$key => $params]);
 
         $body = json_decode(
             json: $response->getBody()->getContents(),
@@ -50,35 +52,10 @@ class HttpHandler
             flags: JSON_OBJECT_AS_ARRAY
         );
 
-        $items = $this->extractItemsFromBody($body, $http);
-
-        return new Response(
-            items: $items,
-            offset: $body['offset'] ?? null,
-            limit: $body['limit'] ?? null,
-            total: $body['total_count'] ?? count($items)
-        );
-    }
-
-    protected function extractItemsFromBody(array $body, Http $http): array
-    {
-        $baseUri = (string) $http->getConfig('base_uri');
-
-        list($items, $class) = match (true) {
-            array_key_exists('projects', $body) => [$body['projects'], Project::class],
-            array_key_exists('issues', $body) => [$body['issues'], Issue::class],
-            array_key_exists('issue', $body) => [[$body['issue']], Issue::class],
-            array_key_exists('versions', $body) => [$body['versions'], Version::class],
-            array_key_exists('time_entries', $body) => [$body['time_entries'], TimeEntry::class]
-        };
-
-        return array_map(
-            function (array $properties) use ($baseUri, $class) {
-                $properties += ['baseUri' => $baseUri];
-
-                return new $class($properties);
-            },
-            $items
-        );
+        return [
+            'body' => $body,
+            'statusCode' => $response->getStatusCode(),
+            'baseUri' => $http->getConfig('base_uri'),
+        ];
     }
 }
