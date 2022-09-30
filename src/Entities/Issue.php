@@ -70,6 +70,9 @@ class Issue extends DataTransferObject
     #[CastWith(DateTimeCaster::class)]
     public ?DateTime $closedOn;
 
+    #[CastWith(ArrayCaster::class, itemType: Relation::class)]
+    public ?array $relations;
+
     public ?string $note;
 
     public function getCustomField(string $fieldName): ?CustomField
